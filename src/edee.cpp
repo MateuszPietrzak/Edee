@@ -21,12 +21,14 @@ void Edee::init() {
     edeeType["getState"] = &Edee::getState;
 
     plugins.push_back(std::make_unique<Plugin>("./plugins/example/plugin.lua"));
+    plugins.push_back(std::make_unique<Plugin>("./plugins/example2/plugin.lua"));
 
     for (auto& plugin: plugins) {
         plugin->init(lua);
 
         auto onInit = plugin->getOnInit();
-        onInit->operator()(this);
+        if (onInit->valid())
+            onInit->operator()(this);
     }
 }
 
@@ -38,7 +40,8 @@ void Edee::cleanup() {
     std::cout << "[C++] Cleanup Edee" << std::endl;
     for (auto& plugin: plugins) {
         auto onCleanup = plugin->getOnCleanup();
-        onCleanup->operator()(this);
+        if (onCleanup->valid())
+            onCleanup->operator()(this);
     }
 }
 
