@@ -15,7 +15,7 @@ void Edee::init() {
     lua = std::make_shared<sol::state>();
     lua->open_libraries(sol::lib::base);
 
-    sol::usertype<Edee> edeeType = lua->new_usertype<Edee>("Edee", sol::constructors<Edee()>());
+    sol::usertype<Edee> edeeType = lua->new_usertype<Edee>("Edee");
 
     edeeType["setState"] = &Edee::setState;
     edeeType["getState"] = &Edee::getState;
