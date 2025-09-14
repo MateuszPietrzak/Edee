@@ -1,12 +1,13 @@
 #ifndef EDEE_H_
 #define EDEE_H_
 
+#include "graphics_backend.h"
 #include "plugin.h"
 #include <sol/sol.hpp>
 
 class Edee {
 public:
-    Edee();
+    Edee(std::unique_ptr<GraphicsBackend> graphics);
 
     void init();
     void run();
@@ -16,6 +17,8 @@ public:
     int getState() const;
 private:
     int state;
+
+    std::unique_ptr<GraphicsBackend> graphics;
 
     std::shared_ptr<sol::state> lua;
     std::vector<std::unique_ptr<Plugin>> plugins;

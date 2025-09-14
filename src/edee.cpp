@@ -1,16 +1,21 @@
 #include "edee.h"
+#include "graphics_backend.h"
 #include "plugin.h"
 
 #include <iostream>
 #include <memory>
 #include <sol/sol.hpp>
 
-Edee::Edee(): state(0) {
+Edee::Edee(std::unique_ptr<GraphicsBackend> graphics) :
+    state(0),
+    graphics(std::move(graphics)) {
 
 }
 
 void Edee::init() {
     std::cout << "[C++] Init Edee" << std::endl;
+
+    graphics->init();
 
     lua = std::make_shared<sol::state>();
     lua->open_libraries(sol::lib::base);
@@ -34,6 +39,10 @@ void Edee::init() {
 
 void Edee::run() {
     std::cout << "[C++] Run Edee" << std::endl;
+
+    while(!graphics->windowShouldClose()) {
+       graphics->draw();
+    }
 }
 
 void Edee::cleanup() {
@@ -43,6 +52,8 @@ void Edee::cleanup() {
         if (onCleanup->valid())
             onCleanup->operator()(this);
     }
+
+    graphics->cleanup();
 }
 
 void Edee::setState(int s) {
