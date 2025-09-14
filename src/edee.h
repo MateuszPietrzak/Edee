@@ -1,6 +1,9 @@
 #ifndef EDEE_H_
 #define EDEE_H_
 
+#include "plugin.h"
+#include <sol/sol.hpp>
+
 class Edee {
 public:
     Edee();
@@ -13,6 +16,9 @@ public:
     int getState() const;
 private:
     int state;
+
+    std::shared_ptr<sol::state> lua;
+    std::vector<std::unique_ptr<Plugin>> plugins;
 };
 
 #endif // EDEE_H_

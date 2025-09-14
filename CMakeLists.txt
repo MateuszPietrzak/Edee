@@ -10,7 +10,8 @@ pkg_search_module(LUA REQUIRED lua5.4)
 
 add_executable(edee
   src/main.cpp
-  src/edee.cpp)
+  src/edee.cpp
+  src/plugin.cpp)
 
 target_include_directories(edee PRIVATE ${LUA_INCLUDE_DIRS})
 target_link_libraries(edee PRIVATE sol2::sol2 ${LUA_LIBRARIES})

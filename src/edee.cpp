@@ -1,6 +1,8 @@
 #include "edee.h"
+#include "plugin.h"
 
 #include <iostream>
+#include <memory>
 #include <sol/sol.hpp>
 
 Edee::Edee(): state(0) {
@@ -8,29 +10,36 @@ Edee::Edee(): state(0) {
 }
 
 void Edee::init() {
-    std::cout << "Init Edee" << std::endl;
+    std::cout << "[C++] Init Edee" << std::endl;
 
-    sol::state lua;
-    lua.open_libraries(sol::lib::base);
+    lua = std::make_shared<sol::state>();
+    lua->open_libraries(sol::lib::base);
 
-    sol::usertype<Edee> edeeType = lua.new_usertype<Edee>("Edee",sol::constructors<Edee()>());
+    sol::usertype<Edee> edeeType = lua->new_usertype<Edee>("Edee", sol::constructors<Edee()>());
 
     edeeType["setState"] = &Edee::setState;
     edeeType["getState"] = &Edee::getState;
 
-    lua.script_file("./plugins/example/plugin.lua");
+    plugins.push_back(std::make_unique<Plugin>("./plugins/example/plugin.lua"));
 
-    sol::function onInit = lua["OnInit"];
+    for (auto& plugin: plugins) {
+        plugin->init(lua);
 
-    onInit(this);
+        auto onInit = plugin->getOnInit();
+        onInit->operator()(this);
+    }
 }
 
 void Edee::run() {
-    std::cout << "Run Edee" << std::endl;
+    std::cout << "[C++] Run Edee" << std::endl;
 }
 
 void Edee::cleanup() {
-    std::cout << "Cleanup Edee" << std::endl;
+    std::cout << "[C++] Cleanup Edee" << std::endl;
+    for (auto& plugin: plugins) {
+        auto onCleanup = plugin->getOnCleanup();
+        onCleanup->operator()(this);
+    }
 }
 
 void Edee::setState(int s) {
