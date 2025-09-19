@@ -1,6 +1,6 @@
-#include "opengl_backend/opengl_backend.h"
 #include "edee.h"
 #include <memory>
+#include "opengl_backend/opengl_backend.h"
 
 int main() {
     Edee app(std::make_unique<OpenGLBackend>());

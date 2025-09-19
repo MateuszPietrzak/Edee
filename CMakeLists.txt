@@ -12,7 +12,9 @@ add_subdirectory(src/opengl_backend)
 add_executable(edee
   src/main.cpp
   src/edee.cpp
-  src/plugin.cpp)
+  src/plugin.cpp
+  src/content_panel.cpp
+)
 
 
 target_link_libraries(edee PUBLIC glad opengl_backend)

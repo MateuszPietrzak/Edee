@@ -2,8 +2,10 @@
 #define EDEE_H_
 
 #include "graphics_backend.h"
+#include "panel.h"
 #include "plugin.h"
 #include <sol/sol.hpp>
+#include <unordered_map>
 
 class Edee {
 public:
@@ -13,11 +15,12 @@ public:
     void run();
     void cleanup();
 
-    void setState(int s);
-    int getState() const;
+    // Lua API
+    void registerConstructor(std::string label, sol::object o);
 private:
-    int state;
+    std::unique_ptr<Panel> rootPanel;
 
+    std::unordered_map<std::string, sol::function> panelTypes;
     std::unique_ptr<GraphicsBackend> graphics;
 
     std::shared_ptr<sol::state> lua;
