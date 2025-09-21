@@ -11,9 +11,11 @@ public:
 
     void init();
     void draw();
-    void resize(int width, int height);
+    void resize(int x, int y, int width, int height);
 
 private:
+    int x;
+    int y;
     int width;
     int height;
 

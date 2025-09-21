@@ -18,6 +18,9 @@ void ContentPanel::draw() {
     panel["draw"](panel);
 }
 
-void ContentPanel::resize(int, int) {
-
+void ContentPanel::resize(int x, int y, int width, int height) {
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
 }

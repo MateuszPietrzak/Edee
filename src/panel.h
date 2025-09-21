@@ -5,7 +5,7 @@ class Panel {
 public:
     virtual void init() = 0;
     virtual void draw() = 0;
-    virtual void resize(int width, int height) = 0;
+    virtual void resize(int x, int y, int width, int height) = 0;
 };
 
 #endif // PANEL_H_
